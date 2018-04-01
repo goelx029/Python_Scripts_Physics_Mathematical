@@ -40,4 +40,4 @@ def plotFunctionAndFourier(stepSize, upperLimitOfX, numberOfFourierSum):
     plt.show()
 
 
-plotFunctionAndFourier(0.001, np.pi/2, 400000)
+plotFunctionAndFourier(0.0001, np.pi/2, 4000)
