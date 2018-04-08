@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>TotalMagneticField.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #606366; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(204,120,50); }
+.s1 { color: rgb(169,183,198); }
+.s2 { color: rgb(128,128,128); }
+.s3 { color: rgb(104,151,187); }
+.s4 { color: rgb(165,194,97); }
+</style>
+</head>
+<BODY BGCOLOR="#2b2b2b">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TotalMagneticField.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np 
+</span><span class="s0">import </span><span class="s1">matplotlib.pyplot </span><span class="s0">as </span><span class="s1">mp 
+</span><span class="s0">from </span><span class="s1">scipy.integrate </span><span class="s0">import </span><span class="s1">quad 
+ 
+ 
+</span><span class="s2">###########################################################</span><span class="s1"> 
+</span><span class="s2"># Function to get the Magnetic Field for a particular x</span><span class="s1"> 
+</span><span class="s2">###########################################################</span><span class="s1"> 
+</span><span class="s0">def </span><span class="s1">getYMagneticFieldAtX(x</span><span class="s0">, </span><span class="s1">alpha): 
+    </span><span class="s0">def </span><span class="s1">integral(theta): 
+        </span><span class="s0">return </span><span class="s1">np.sin(theta)/(((x**</span><span class="s3">2</span><span class="s1">) - </span><span class="s3">2</span><span class="s1">*x*np.cos(alpha)*np.sin(theta))**</span><span class="s3">1.5</span><span class="s1">) 
+    res</span><span class="s0">, </span><span class="s1">err = quad(integral</span><span class="s0">, </span><span class="s3">0</span><span class="s0">, </span><span class="s3">2</span><span class="s1">*np.pi) 
+    </span><span class="s0">if </span><span class="s1">(x * np.sin(alpha) * res) &lt; </span><span class="s3">0.000001</span><span class="s1">: 
+        </span><span class="s0">return </span><span class="s3">0</span><span class="s1"> 
+    </span><span class="s0">return </span><span class="s1">x * np.sin(alpha) * res 
+ 
+</span><span class="s0">def </span><span class="s1">getZMagneticFieldAtX(x</span><span class="s0">, </span><span class="s1">alpha): 
+    </span><span class="s0">def </span><span class="s1">integral(theta): 
+        </span><span class="s0">return </span><span class="s1">(</span><span class="s3">1 </span><span class="s1">- x*np.cos(alpha)*np.sin(theta))/(((x**</span><span class="s3">2</span><span class="s1">) - </span><span class="s3">2</span><span class="s1">*x*np.cos(alpha)*np.sin(theta))**</span><span class="s3">1.5</span><span class="s1">) 
+    res</span><span class="s0">, </span><span class="s1">err = quad(integral</span><span class="s0">, </span><span class="s3">0</span><span class="s0">, </span><span class="s3">2</span><span class="s1">*np.pi) 
+    </span><span class="s0">return </span><span class="s1">res 
+ 
+</span><span class="s2"># x is the ratio of rho and a</span><span class="s1"> 
+</span><span class="s0">def </span><span class="s1">plotPartB(alpha</span><span class="s0">, </span><span class="s1">start = </span><span class="s3">1</span><span class="s0">, </span><span class="s1">end = </span><span class="s3">5</span><span class="s0">, </span><span class="s1">stepsize = </span><span class="s3">0.1</span><span class="s1">): 
+    xAxis = [start + i*stepsize </span><span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(int(end//stepsize) + </span><span class="s3">2</span><span class="s1">)] 
+    yAxis = [getYMagneticFieldAtX(xValue</span><span class="s0">, </span><span class="s1">alpha) </span><span class="s0">for </span><span class="s1">xValue </span><span class="s0">in </span><span class="s1">xAxis] 
+    zAxis = [getZMagneticFieldAtX(xValue</span><span class="s0">, </span><span class="s1">alpha) </span><span class="s0">for </span><span class="s1">xValue </span><span class="s0">in </span><span class="s1">xAxis] 
+    mp.plot(xAxis</span><span class="s0">, </span><span class="s1">yAxis</span><span class="s0">, </span><span class="s1">label = </span><span class="s4">&quot;Y component&quot;</span><span class="s1">) 
+    mp.plot(xAxis</span><span class="s0">, </span><span class="s1">zAxis</span><span class="s0">, </span><span class="s1">label=</span><span class="s4">&quot;Z component&quot;</span><span class="s0">, </span><span class="s1">ls = </span><span class="s4">&quot;:&quot;</span><span class="s1">) 
+    mp.xlim(xmin=</span><span class="s3">1.5</span><span class="s1">) 
+    mp.legend() 
+    mp.xlabel(</span><span class="s4">'X/a ( &gt; 1.5)'</span><span class="s1">) 
+    mp.ylabel(</span><span class="s4">'B/Bnot'</span><span class="s1">) 
+    mp.title(</span><span class="s4">'B v/s X. Alpha = PI/2'</span><span class="s1">) 
+    mp.show() 
+    </span><span class="s2">#mp.savefig('By v/s X')</span><span class="s1"> 
+ 
+</span><span class="s2">#print (getMagneticFieldAtX(1.5, np.pi/2))</span><span class="s1"> 
+ 
+</span><span class="s2">#plotPartB(0, 1.5, 10, 0.01)</span><span class="s1"> 
+</span><span class="s2">#plotPartB(np.pi/4, 1.5, 10, 0.01)</span><span class="s1"> 
+plotPartB(np.pi/</span><span class="s3">2</span><span class="s0">, </span><span class="s3">1.5</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s3">0.01</span><span class="s1">) 
+</span></pre>
+</body>
+</html>
